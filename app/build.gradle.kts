@@ -45,8 +45,8 @@ android {
 }
 
 dependencies {
-    implementation("io.coil-kt.coil3:coil-compose:3.4.0")
-    implementation("io.coil-kt.coil3:coil-network-okhttp:3.4.0")
+    implementation(libs.coil.compose)
+    implementation(libs.coil.network.okhttp)
     implementation(libs.androidx.core.splashscreen)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.lottie.compose )
@@ -68,5 +68,32 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.test.manifest)
     implementation(libs.androidx.compose.material.icons.extended)
     implementation(libs.androidx.compose.material)
+    implementation(libs.androidx.compose.foundation)
 
+    //supabase
+    implementation(platform(libs.bom.v322))
+    implementation(libs.github.postgrest.kt)
+    implementation(libs.auth.kt)
+    implementation(libs.realtime.kt)
+    implementation(libs.storage.kt)
+
+    //ktor
+    implementation(libs.ktor.client.android.v323)
+
+    implementation(libs.io.github.jan.tennert.supabase.postgrest.kt)
+    implementation(libs.supabase.auth.kt)
+    implementation(libs.supabase.storage.kt)
+
+
+// ViewModel
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+
+
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.auth.ktx)
+
+
+
+// ViewModel
+//implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1")
 }

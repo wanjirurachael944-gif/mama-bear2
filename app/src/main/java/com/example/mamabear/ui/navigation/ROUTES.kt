@@ -5,6 +5,6 @@ enum class ROUTES {
     SignupPage,
     ForgotPassword,
     Onboarding,
-    DashboardScreen
+    Home
 
 }

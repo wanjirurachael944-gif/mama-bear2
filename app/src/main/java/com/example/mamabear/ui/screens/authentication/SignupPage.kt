@@ -1,8 +1,11 @@
 package com.example.mamabear.ui.screens.authentication
 
 import android.R.attr.contentDescription
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -38,183 +41,161 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.example.mamabear.R
 import com.example.mamabear.ui.navigation.ROUTES
+import com.example.mamabear.ui.theme.PurplePrimary
 import com.example.mamabear.ui.theme.primaryColor
 import com.example.mamabear.ui.theme.purpleColor
 import com.example.mamabear.ui.theme.secondaryColor
 
 @Composable
-fun SignupPage (navController:NavHostController ,modifier: Modifier) {
-    var fullNameInput by remember { mutableStateOf(TextFieldValue("")) }
-    var emailInput by remember { mutableStateOf(TextFieldValue("")) }
-    var passwordInput by remember { mutableStateOf(TextFieldValue("")) }
-    var confirmInput by remember { mutableStateOf(TextFieldValue("")) }
-    var isVisible by remember { mutableStateOf(value = false) }
+fun SignupScreen(navController: NavController) {
+
+    var name by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+    var confirmPassword by remember { mutableStateOf("") }
+
+    var errorMessage by remember { mutableStateOf("") }
 
     Column(
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color(0xFFF8F6FB))
+            .padding(24.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        //Lottie Animation
-        LottieAnimationWidget(R.raw.user_icon, 100.dp)
-        Spacer(modifier = Modifier.height(8.dp))
-        //welcome message
+
+        Spacer(modifier = Modifier.height(40.dp))
+
+        // 🔹 TITLE
         Text(
-            text = "Create Account",
-            style = TextStyle(
-                fontSize = 32.sp,
-                fontWeight = FontWeight.Bold
-            )
+            text = "Create Account 💜",
+            fontSize = 28.sp,
+            fontWeight = FontWeight.Bold,
+            color = PurplePrimary
         )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
         Text(
-            text = "Signup to get started!",
-            style = TextStyle(
-                fontSize = 20.sp,
-            )
+            text = "Join MamaBear today",
+            color = Color.Gray
         )
-        Spacer(modifier = Modifier.height(8.dp))
-        //name Input
-        OutlinedTextField(
-            value = fullNameInput,
-            onValueChange = { fullNameInput = it },
-            label = { Text(text = "Enter full Name") },
-            leadingIcon = {
-                Icon(
-                    imageVector = ImageVector.vectorResource(R.drawable.baseline_person_24),
-                    contentDescription = "fullName",
-                    tint = purpleColor
-                )
 
-            },
-            shape = RoundedCornerShape(32.dp),
-            colors = OutlinedTextFieldDefaults.colors(
-                focusedBorderColor = secondaryColor,
-                unfocusedBorderColor = primaryColor
-            ),
-            modifier = Modifier.fillMaxWidth().padding(24.dp)
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        //  emailInput
-        OutlinedTextField(
-            value = emailInput,
-            onValueChange = { emailInput = it },
-            label = { Text(text = "Enter Email") },
-            leadingIcon = {
-                Icon(
-                    imageVector = Icons.Filled.Email,
-                    contentDescription = "Email",
-                    tint = purpleColor
-                )
-            },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-            shape = RoundedCornerShape(32.dp),
-            colors = OutlinedTextFieldDefaults.colors(
-                focusedBorderColor = secondaryColor,
-                unfocusedBorderColor = primaryColor
-            ),
-            modifier = Modifier.fillMaxWidth().padding(24.dp)
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        //password input
-        OutlinedTextField(
-            value = passwordInput,
-            onValueChange = { passwordInput = it },
-            label = { Text(text = "Enter Password") },
-            leadingIcon = {
-                Icon(
-                    imageVector = ImageVector.vectorResource(R.drawable.baseline_password_24),
-                    contentDescription = "Password",
-                    tint = purpleColor
-                )
-            },
-            trailingIcon = {
-                IconButton(onClick = { isVisible = !isVisible }) {
-                    Icon(
-                        imageVector = ImageVector.vectorResource(R.drawable.baseline_visibility_24),
-                        contentDescription = "Password",
-                        tint = purpleColor
-                    )
-                }
-            },
-            visualTransformation = if (!isVisible) {
-                PasswordVisualTransformation()
-            } else VisualTransformation.None,
+        Spacer(modifier = Modifier.height(30.dp))
 
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-            shape = RoundedCornerShape(32.dp),
-            colors = OutlinedTextFieldDefaults.colors(
-                focusedBorderColor = secondaryColor,
-                unfocusedBorderColor = primaryColor
-            ),
-            modifier = Modifier.fillMaxWidth().padding(24.dp)
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-//Confirm password
+        // 🔹 FULL NAME
         OutlinedTextField(
-            value = passwordInput,
-            onValueChange = { passwordInput = it },
-            label = { Text(text = "Confirm Password") },
-            leadingIcon = {
-                Icon(
-                    imageVector = ImageVector.vectorResource(R.drawable.baseline_password_24),
-                    contentDescription = "Password",
-                    tint = purpleColor
-                )
-            },
-            trailingIcon = {
-                IconButton(onClick = { isVisible = !isVisible }) {
-
-                    Icon(
-                        imageVector = ImageVector.vectorResource(R.drawable.baseline_visibility_24),
-                        contentDescription = "Password",
-                        tint = purpleColor
-                    )
-                }
-            },
-            visualTransformation = if (!isVisible) {
-                PasswordVisualTransformation()
-            } else VisualTransformation.None,
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-            shape = RoundedCornerShape(32.dp),
-            colors = OutlinedTextFieldDefaults.colors(
-                focusedBorderColor = secondaryColor,
-                unfocusedBorderColor = primaryColor
-            ),
-            modifier = Modifier.fillMaxWidth().padding(24.dp)
+            value = name,
+            onValueChange = { name = it },
+            label = { Text("Full Name") },
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(14.dp)
         )
-        Spacer(modifier = Modifier.height(8.dp))
-        //Signup button
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // 🔹 EMAIL
+        OutlinedTextField(
+            value = email,
+            onValueChange = { email = it },
+            label = { Text("Email") },
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(14.dp)
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // 🔹 PASSWORD
+        OutlinedTextField(
+            value = password,
+            onValueChange = { password = it },
+            label = { Text("Password") },
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(14.dp),
+            visualTransformation = PasswordVisualTransformation()
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // 🔹 CONFIRM PASSWORD
+        OutlinedTextField(
+            value = confirmPassword,
+            onValueChange = { confirmPassword = it },
+            label = { Text("Confirm Password") },
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(14.dp),
+            visualTransformation = PasswordVisualTransformation()
+        )
+
+        Spacer(modifier = Modifier.height(30.dp))
+
+        // 🔥 SIGN UP BUTTON
         Button(
-            onClick = { },
+            onClick = {
+
+                if (password == confirmPassword) {
+
+                    errorMessage = ""
+
+                    navController.navigate("dashboard")
+
+                } else {
+
+                    errorMessage = "Passwords do not match"
+                }
+            },
+
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(55.dp),
+
+            shape = RoundedCornerShape(14.dp),
+
             colors = ButtonDefaults.buttonColors(
-                containerColor = purpleColor
-            ),
-            modifier = Modifier.fillMaxWidth().padding(24.dp)
+                containerColor = PurplePrimary
+            )
 
         ) {
-            Text(
-                text = "SIGN UP",
-                color = Color.White,
-                fontSize = 24.sp,
-                fontWeight = FontWeight.Bold
-            )
-            Spacer(modifier = Modifier.height(2.dp))
-            //navigation button
-            OutlinedButton(
-                onClick = {
-                    navController.navigate(ROUTES.Login.name)
-                }
-            ) {
-                Text(
-                    text = "( Login )"
-                )
-            }
 
+            Text(
+                text = "Sign Up",
+                color = Color.White,
+                fontSize = 18.sp
+            )
+        }
+
+        // 🔹 ERROR MESSAGE
+        if (errorMessage.isNotEmpty()) {
+
+            Spacer(modifier = Modifier.height(10.dp))
+
+            Text(
+                text = errorMessage,
+                color = Color.Red
+            )
+        }
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        // 🔹 LOGIN NAVIGATION
+        Row {
+
+            Text("Already have an account? ")
+
+            Text(
+                text = "Login",
+                color = PurplePrimary,
+                fontWeight = FontWeight.Bold,
+
+                modifier = Modifier.clickable {
+
+                    navController.navigate("login")
+                }
+            )
         }
     }
-
 }
-

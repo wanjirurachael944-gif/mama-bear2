@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "595936566778",
+    "project_id": "mama-bear-3180f",
+    "storage_bucket": "mama-bear-3180f.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:595936566778:android:9d5e5617b5e31db9255843",
+        "android_client_info": {
+          "package_name": "com.example.mamabear"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC2qe7TcVxeCDvwX2TcRo2jY03pxbER2Fs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

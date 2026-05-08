@@ -1,5 +1,7 @@
 package com.example.mamabear.ui.screens.authentication
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -41,110 +43,120 @@ import com.example.mamabear.ui.theme.secondaryColor
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material3.OutlinedButton
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.example.mamabear.ui.navigation.ROUTES
+import com.example.mamabear.ui.theme.PurplePrimary
 
 @Composable
-fun ForgotPasswordScreen(navController: NavHostController, modifier : Modifier){
-    var emailInput by remember { mutableStateOf(TextFieldValue("")) }
+fun ForgotPasswordScreen(navController: NavController) {
+
+    var email by remember { mutableStateOf("") }
+
+    var message by remember { mutableStateOf("") }
 
     Column(
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color(0xFFF8F6FB))
+            .padding(24.dp),
+
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-    //Lottie Animation
-        LottieAnimationWidget(R.raw.forgot_password,250.dp)
-        Spacer(modifier = Modifier.height(28.dp))
-    //welcome message
+
+        Spacer(modifier = Modifier.height(60.dp))
+
+        // 🔹 TITLE
         Text(
-            text = "Forgot Password?",
-            style = TextStyle(
-                fontSize = 36.sp,
-                fontWeight = FontWeight.Bold
-
-            )
+            text = "Forgot Password 🔐",
+            fontSize = 28.sp,
+            fontWeight = FontWeight.Bold,
+            color = PurplePrimary
         )
-        Spacer(modifier = Modifier.height(16.dp))
 
+        Spacer(modifier = Modifier.height(10.dp))
+
+        // 🔹 SUBTITLE
         Text(
-            text = "Enter email to reset your password",
-            style = TextStyle(
-                fontSize = 16.sp,
-
-
-                )
+            text = "Enter your email to reset your password",
+            color = Color.Gray
         )
-        Spacer(modifier = Modifier.height(24.dp))
-      //email input
+
+        Spacer(modifier = Modifier.height(40.dp))
+
+        // 🔹 EMAIL INPUT
         OutlinedTextField(
-            value = emailInput,
-            onValueChange = { emailInput = it },
-            label = { Text(text = "Enter Email") },
-            leadingIcon = {
-                Icon(
-                    imageVector = Icons.Filled.Email,
-                    contentDescription = "Email",
-                    tint = purpleColor
-                )
+            value = email,
+            onValueChange = { email = it },
+
+            label = {
+                Text("Email")
             },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-            shape = RoundedCornerShape(32.dp),
-            colors = OutlinedTextFieldDefaults.colors(
-                focusedBorderColor = secondaryColor,
-                unfocusedBorderColor = primaryColor
-            ),
-            modifier = Modifier.fillMaxWidth() .padding(24.dp)
+
+            modifier = Modifier.fillMaxWidth(),
+
+            shape = RoundedCornerShape(14.dp)
         )
-        Spacer(modifier = Modifier.height(12.dp))
-        //button
+
+        Spacer(modifier = Modifier.height(30.dp))
+
+        // 🔥 RESET BUTTON
         Button(
-            onClick = { },
+            onClick = {
+
+                if (email.isNotEmpty()) {
+
+                    message = "Password reset link sent to your email"
+
+                } else {
+
+                    message = "Please enter your email"
+                }
+            },
+
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(55.dp),
+
+            shape = RoundedCornerShape(14.dp),
+
             colors = ButtonDefaults.buttonColors(
-                containerColor = purpleColor
-            ),
-            modifier = Modifier .fillMaxWidth().padding(24.dp)
+                containerColor = PurplePrimary
+            )
 
         ) {
+
             Text(
-                text = "Reset Password" ,
+                text = "Reset Password",
                 color = Color.White,
-                fontSize = 24.sp ,
-                fontWeight = FontWeight.Bold
-
-
+                fontSize = 18.sp
             )
-            Spacer(modifier = Modifier.height(36.dp))
         }
-        Text(
-            text = "Back to sign in",
-            style = TextStyle(
-                fontSize = 24.sp,
-                fontWeight = FontWeight.Bold
 
+        Spacer(modifier = Modifier.height(16.dp))
 
-            )
-        )
-        Spacer(modifier = Modifier.height(36.dp))
-        OutlinedButton(
-            onClick = {
-                navController.navigate(ROUTES.SignupPage.name)
-            }
-        ){
+        // 🔹 MESSAGE
+        if (message.isNotEmpty()) {
+
             Text(
-                text = "Get started(Register.name)"
+                text = message,
+                color = PurplePrimary,
+                fontWeight = FontWeight.Medium
             )
         }
 
-    }
-}
+        Spacer(modifier = Modifier.height(30.dp))
 
-@Composable
-fun LottieAnimationWidget() {
-    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.forgot_password))
-    val progress by animateLottieCompositionAsState(composition)
-    LottieAnimation(
-        composition = composition,
-        progress = { progress },
-    )
+        // 🔹 BACK TO LOGIN
+        Text(
+            text = "Back to Login",
+            color = PurplePrimary,
+            fontWeight = FontWeight.Bold,
+
+            modifier = Modifier.clickable {
+
+                navController.navigate("login")
+            }
+        )
+    }
 }

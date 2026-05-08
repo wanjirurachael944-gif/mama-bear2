@@ -5,35 +5,46 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.mamabear.ui.screens.Onboarding.OnboardingScreen
+import androidx.navigation.compose.rememberNavController
+import com.example.mamabear.screens.OnboardingScreen
 import com.example.mamabear.ui.screens.authentication.ForgotPasswordScreen
-import com.example.mamabear.ui.screens.authentication.LoginScreen
-import com.example.mamabear.ui.screens.authentication.SignupPage
-import com.example.mamabear.ui.screens.home.DashboardScreen
+import com.example.mamabear.ui.screens.authentication.SignupScreen
+import com.example.mamabear.ui.screens.login.LoginScreen
 
 @Composable
-fun AppNavigation(navController: NavHostController, modifier : Modifier){
+fun AppNavigation(
+    navHostController: NavHostController,
+    modifier : Modifier = Modifier
+) {
+
+    //val navController = rememberNavController()
+
     NavHost(
-        navController = navController ,
-        startDestination = ROUTES.Onboarding.name
-    ){
-        composable(ROUTES.Onboarding.name){
-            OnboardingScreen(navController,modifier)
-        }
-        composable(ROUTES.Login.name){
-            LoginScreen(navController,modifier)
+        navController = navHostController,
+        startDestination = "onboarding" ,
+        modifier = modifier
+    ) {
+
+        // 🔹 ONBOARDING
+        composable("onboarding") {
+            OnboardingScreen(navController = navHostController)
         }
 
-       composable(ROUTES.ForgotPassword.name) {
-           ForgotPasswordScreen(navController,modifier)
-       }
-        composable(ROUTES.SignupPage.name){
-            SignupPage (navController,modifier)
-        }
-        composable(ROUTES .DashboardScreen.name){
-            DashboardScreen( navController ,modifier)
+        // 🔹 LOGIN
+        composable("login") {
+            LoginScreen(navHostController)
         }
 
+        // 🔹 SIGNUP
+        composable("signup") {
+            SignupScreen(navHostController)
         }
+
+        // 🔹 FORGOT PASSWORD
+        composable("forgotPassword") {
+            ForgotPasswordScreen(navHostController)
+        }
+
+
     }
-
+}
