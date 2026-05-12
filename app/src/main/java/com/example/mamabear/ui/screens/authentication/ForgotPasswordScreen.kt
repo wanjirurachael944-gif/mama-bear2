@@ -1,58 +1,32 @@
 package com.example.mamabear.ui.screens.authentication
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.airbnb.lottie.compose.LottieAnimation
-import com.airbnb.lottie.compose.LottieCompositionSpec
-import com.airbnb.lottie.compose.animateLottieCompositionAsState
-import com.airbnb.lottie.compose.rememberLottieComposition
-import com.example.mamabear.R
-import com.example.mamabear.R.raw
-import com.example.mamabear.ui.theme.primaryColor
-import com.example.mamabear.ui.theme.purpleColor
-import com.example.mamabear.ui.theme.secondaryColor
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Email
-import androidx.compose.material3.OutlinedButton
 import androidx.navigation.NavController
-import androidx.navigation.NavHostController
-import com.example.mamabear.ui.navigation.ROUTES
-import com.example.mamabear.ui.theme.PurplePrimary
+import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 
 @Composable
-fun ForgotPasswordScreen(navController: NavController) {
+fun ForgotPasswordScreen(
+    navController: NavController
+) {
 
-    var email by remember { mutableStateOf("") }
+    var email by remember {
+        mutableStateOf("")
+    }
 
+    val scope = rememberCoroutineScope()
+    var isLoading by remember { mutableStateOf(false) }
     var message by remember { mutableStateOf("") }
 
     Column(
@@ -61,33 +35,44 @@ fun ForgotPasswordScreen(navController: NavController) {
             .background(Color(0xFFF8F6FB))
             .padding(24.dp),
 
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
     ) {
 
-        Spacer(modifier = Modifier.height(60.dp))
-
-        // 🔹 TITLE
         Text(
-            text = "Forgot Password 🔐",
-            fontSize = 28.sp,
+            text = "Forgot Password",
+
+            fontSize = 30.sp,
+
             fontWeight = FontWeight.Bold,
-            color = PurplePrimary
+
+            color = Color(0xFF9C6ADE)
         )
 
         Spacer(modifier = Modifier.height(10.dp))
 
-        // 🔹 SUBTITLE
         Text(
-            text = "Enter your email to reset your password",
+            text = "Enter your email to reset password",
+
             color = Color.Gray
         )
 
-        Spacer(modifier = Modifier.height(40.dp))
+        Spacer(modifier = Modifier.height(30.dp))
 
-        // 🔹 EMAIL INPUT
+        if (message.isNotEmpty()) {
+            Text(
+                text = message,
+                color = if (message.contains("Error")) Color.Red else Color.Green,
+                modifier = Modifier.padding(bottom = 16.dp)
+            )
+        }
+
         OutlinedTextField(
             value = email,
-            onValueChange = { email = it },
+
+            onValueChange = {
+                email = it
+            },
 
             label = {
                 Text("Email")
@@ -95,22 +80,26 @@ fun ForgotPasswordScreen(navController: NavController) {
 
             modifier = Modifier.fillMaxWidth(),
 
-            shape = RoundedCornerShape(14.dp)
+            shape = RoundedCornerShape(16.dp)
         )
 
         Spacer(modifier = Modifier.height(30.dp))
 
-        // 🔥 RESET BUTTON
         Button(
+
             onClick = {
-
                 if (email.isNotEmpty()) {
-
-                    message = "Password reset link sent to your email"
-
-                } else {
-
-                    message = "Please enter your email"
+                    scope.launch {
+                        isLoading = true
+                        try {
+                            FirebaseAuth.getInstance().sendPasswordResetEmail(email).await()
+                            message = "Password reset link sent to your email!"
+                        } catch (e: Exception) {
+                            message = "Error: ${e.message}"
+                        } finally {
+                            isLoading = false
+                        }
+                    }
                 }
             },
 
@@ -118,45 +107,24 @@ fun ForgotPasswordScreen(navController: NavController) {
                 .fillMaxWidth()
                 .height(55.dp),
 
-            shape = RoundedCornerShape(14.dp),
+            enabled = !isLoading,
+
+            shape = RoundedCornerShape(18.dp),
 
             colors = ButtonDefaults.buttonColors(
-                containerColor = PurplePrimary
+                containerColor = Color(0xFF9C6ADE)
             )
 
         ) {
 
-            Text(
-                text = "Reset Password",
-                color = Color.White,
-                fontSize = 18.sp
-            )
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // 🔹 MESSAGE
-        if (message.isNotEmpty()) {
-
-            Text(
-                text = message,
-                color = PurplePrimary,
-                fontWeight = FontWeight.Medium
-            )
-        }
-
-        Spacer(modifier = Modifier.height(30.dp))
-
-        // 🔹 BACK TO LOGIN
-        Text(
-            text = "Back to Login",
-            color = PurplePrimary,
-            fontWeight = FontWeight.Bold,
-
-            modifier = Modifier.clickable {
-
-                navController.navigate("login")
+            if (isLoading) {
+                CircularProgressIndicator(color = Color.White, modifier = Modifier.size(24.dp))
+            } else {
+                Text(
+                    text = "Reset Password",
+                    color = Color.White
+                )
             }
-        )
+        }
     }
 }

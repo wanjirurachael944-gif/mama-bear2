@@ -5,6 +5,13 @@ enum class ROUTES {
     SignupPage,
     ForgotPassword,
     Onboarding,
-    Home
-
+    Home,
+    HealthRecords,
+    Savings,
+    Reminders,
+    Profile,
+    SymptomTracker,
+    BabyGrowth,
+    Splash,
+    PersonalDetails
 }

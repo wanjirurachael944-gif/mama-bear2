@@ -22,16 +22,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.mamabear.ui.components.BottomNavigationBar
 import com.example.mamabear.ui.navigation.AppNavigation
 import com.example.mamabear.ui.theme.MamaBearTheme
-import io.github.jan.supabase.auth.Auth
-import io.github.jan.supabase.createSupabaseClient
-import io.github.jan.supabase.postgrest.Postgrest
-import io.github.jan.supabase.postgrest.from
-import io.ktor.websocket.WebSocketDeflateExtension.Companion.install
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,13 +34,24 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             MamaBearTheme {
-                val  navController = rememberNavController()
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                val navController = rememberNavController()
+                val navBackStackEntry by navController.currentBackStackEntryAsState()
+                val currentRoute = navBackStackEntry?.destination?.route
+
+                val showBottomBar = currentRoute in listOf("home", "healthrecords", "savings", "profile", "reminders")
+
+                Scaffold(
+                    modifier = Modifier.fillMaxSize(),
+                    bottomBar = {
+                        if (showBottomBar) {
+                            BottomNavigationBar(navController = navController)
+                        }
+                    }
+                ) { innerPadding ->
                     AppNavigation(
                         navHostController = navController,
                         modifier = Modifier.padding(innerPadding)
                     )
-
                 }
             }
         }

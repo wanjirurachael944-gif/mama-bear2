@@ -6,6 +6,10 @@ import org.gradle.kotlin.dsl.invoke
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
+
+
+    alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.google.gms.google.services)
 }
 
 android {
@@ -45,6 +49,12 @@ android {
 }
 
 dependencies {
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.auth.ktx)
+    implementation(libs.firebase.database)
+    implementation(libs.firebase.storage)
+    implementation(libs.firebase.ai)
+    
     implementation(libs.coil.compose)
     implementation(libs.coil.network.okhttp)
     implementation(libs.androidx.core.splashscreen)
@@ -59,6 +69,7 @@ dependencies {
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.navigation.runtime.ktx)
+    
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -70,30 +81,9 @@ dependencies {
     implementation(libs.androidx.compose.material)
     implementation(libs.androidx.compose.foundation)
 
-    //supabase
-    implementation(platform(libs.bom.v322))
-    implementation(libs.github.postgrest.kt)
-    implementation(libs.auth.kt)
-    implementation(libs.realtime.kt)
-    implementation(libs.storage.kt)
-
-    //ktor
-    implementation(libs.ktor.client.android.v323)
-
-    implementation(libs.io.github.jan.tennert.supabase.postgrest.kt)
-    implementation(libs.supabase.auth.kt)
-    implementation(libs.supabase.storage.kt)
-
-
 // ViewModel
     implementation(libs.androidx.lifecycle.viewmodel.compose)
 
-
-    implementation(platform(libs.firebase.bom))
-    implementation(libs.firebase.auth.ktx)
-
-
-
-// ViewModel
-//implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1")
+    //serialization
+    implementation(libs.kotlinx.serialization.json)
 }
