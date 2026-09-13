@@ -1,4 +1,3 @@
-import org.gradle.internal.impldep.org.jsoup.nodes.Entities
 import org.gradle.kotlin.dsl.androidTestImplementation
 import org.gradle.kotlin.dsl.implementation
 import org.gradle.kotlin.dsl.invoke
@@ -10,15 +9,13 @@ plugins {
 
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.google.gms.google.services)
+    alias(libs.plugins.kotlin.android)
 }
 
 android {
     namespace = "com.example.mamabear"
-    compileSdk {
-        version = release(36) {
-            minorApiLevel = 1
-        }
-    }
+    compileSdk = 36
+
 
     defaultConfig {
         applicationId = "com.example.mamabear"
@@ -46,6 +43,9 @@ android {
     buildFeatures {
         compose = true
     }
+    kotlinOptions {
+        jvmTarget = "11"
+    }
 }
 
 dependencies {
@@ -68,7 +68,7 @@ dependencies {
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
-    implementation(libs.androidx.navigation.runtime.ktx)
+   //  implementation(libs.androidx.navigation.runtime.ktx)
     
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
@@ -78,7 +78,6 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
     implementation(libs.androidx.compose.material.icons.extended)
-    implementation(libs.androidx.compose.material)
     implementation(libs.androidx.compose.foundation)
 
 // ViewModel

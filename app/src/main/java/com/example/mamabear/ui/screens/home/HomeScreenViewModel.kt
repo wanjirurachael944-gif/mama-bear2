@@ -56,7 +56,10 @@ class HomeViewModel : ViewModel() {
                         .sortedBy { it.date }
                         .firstOrNull()
 
-                    val latestRecord = records.firstOrNull()
+                    val latestRecord = records
+                        .sortedByDescending { it.date }
+                        .firstOrNull()
+
                     val totalSaved = savings.sumOf { it.amountSaved }
 
                     HomeUiState(

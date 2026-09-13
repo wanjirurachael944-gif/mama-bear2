@@ -1,5 +1,5 @@
 [versions]
-agp = "9.1.1"
+agp = "8.11.1"
 coilCompose = "3.4.0"
 coilNetworkOkhttp = "3.4.0"
 coreKtx = "1.18.0"
@@ -60,3 +60,4 @@ android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 google-gms-google-services = { id = "com.google.gms.google-services", version.ref = "googleGmsGoogleServices" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }

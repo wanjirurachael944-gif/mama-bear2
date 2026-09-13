@@ -10,6 +10,8 @@ data class SavingsModel(
 
     val amountSaved: Int = 0,
 
-    val savingsGoal: Int = 0
+    val savingsGoal: Int = 0 ,
+
+    val category : String = "General "
 
 )

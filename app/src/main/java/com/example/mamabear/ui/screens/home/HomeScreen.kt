@@ -160,13 +160,10 @@ fun HomeScreen(
             }
 
             // 🔥 HEALTH RECORDS CARD
-            QuickActionCard(
-                title = "Health Records",
-                subtitle = uiState.latestRecord?.let { "Last BP: ${it.bloodPressure}" } ?: "Track blood pressure, health and weight",
-                icon = Icons.Default.Favorite,
-                onClick = { navController.navigate("healthrecords") }
-            )
-
+           HealthSummaryCard (
+               latestRecord = uiState.latestRecord,
+               onClick = { navController.navigate("healthrecords") }
+           )
             Spacer(modifier = Modifier.height(16.dp))
 
             // 🔥 SAVINGS CARD
@@ -262,6 +259,125 @@ fun QuickActionCard(
                     text = subtitle,
                     color = Color.Gray,
                     fontSize = 14.sp
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun HealthSummaryCard(
+    latestRecord: com.example.mamabear.data.models.HealthRecordsModel?,
+    onClick: () -> Unit
+) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { onClick() },
+        shape = RoundedCornerShape(24.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = Color.White
+        ),
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = 4.dp
+        )
+    ) {
+
+        Column(
+            modifier = Modifier.padding(20.dp)
+        ) {
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+
+                Icon(
+                    imageVector = Icons.Default.Favorite,
+                    contentDescription = "Health Records",
+                    tint = MamaBearPurple,
+                    modifier = Modifier.size(32.dp)
+                )
+
+                Spacer(modifier = Modifier.width(16.dp))
+
+                Text(
+                    text = "Health Records",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 20.sp
+                )
+            }
+
+            Spacer(modifier = Modifier.height(18.dp))
+
+            if (latestRecord != null) {
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+
+                    Column {
+                        Text(
+                            text = "Blood Pressure",
+                            color = Color.Gray,
+                            fontSize = 13.sp
+                        )
+
+                        Spacer(modifier = Modifier.height(4.dp))
+
+                        Text(
+                            text = if (latestRecord.bloodPressure.isNotEmpty())
+                                "${latestRecord.bloodPressure} mmHg"
+                            else
+                                "Not recorded",
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 17.sp,
+                            color = MamaBearPurple
+                        )
+                    }
+
+                    Column {
+                        Text(
+                            text = "Weight",
+                            color = Color.Gray,
+                            fontSize = 13.sp
+                        )
+
+                        Spacer(modifier = Modifier.height(4.dp))
+
+                        Text(
+                            text = if (latestRecord.weight.isNotEmpty())
+                                "${latestRecord.weight} kg"
+                            else
+                                "Not recorded",
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 17.sp,
+                            color = MamaBearPurple
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(15.dp))
+
+                Text(
+                    text = "Last updated: ${latestRecord.date}",
+                    fontSize = 12.sp,
+                    color = Color.Gray
+                )
+
+            } else {
+
+                Text(
+                    text = "No health records yet",
+                    color = Color.Gray
+                )
+
+                Spacer(modifier = Modifier.height(5.dp))
+
+                Text(
+                    text = "Your health information will appear here after your first visit.",
+                    fontSize = 13.sp,
+                    color = Color.Gray
                 )
             }
         }

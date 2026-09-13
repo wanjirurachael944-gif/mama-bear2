@@ -12,7 +12,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.mamabear.ui.theme.MamaBearPurple
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
@@ -21,84 +23,103 @@ fun ForgotPasswordScreen(
     navController: NavController
 ) {
 
-    var email by remember {
-        mutableStateOf("")
-    }
-
-    val scope = rememberCoroutineScope()
+    var email by remember { mutableStateOf("") }
     var isLoading by remember { mutableStateOf(false) }
     var message by remember { mutableStateOf("") }
+
+    val scope = rememberCoroutineScope()
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(Color(0xFFF8F6FB))
             .padding(24.dp),
-
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
 
         Text(
             text = "Forgot Password",
-
             fontSize = 30.sp,
-
             fontWeight = FontWeight.Bold,
-
-            color = Color(0xFF9C6ADE)
+            color = MamaBearPurple
         )
 
         Spacer(modifier = Modifier.height(10.dp))
 
         Text(
-            text = "Enter your email to reset password",
-
+            text = "Enter your email to reset your password",
             color = Color.Gray
         )
 
         Spacer(modifier = Modifier.height(30.dp))
 
+        OutlinedTextField(
+            value = email,
+            onValueChange = {
+                email = it
+                message = ""
+            },
+            label = {
+                Text("Email")
+            },
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(16.dp),
+            singleLine = true
+        )
+
+        Spacer(modifier = Modifier.height(20.dp))
+
         if (message.isNotEmpty()) {
             Text(
                 text = message,
-                color = if (message.contains("Error")) Color.Red else Color.Green,
+                color = if (message.startsWith("Error")) {
+                    Color.Red
+                } else {
+                    MamaBearPurple
+                },
+                fontSize = 14.sp,
                 modifier = Modifier.padding(bottom = 16.dp)
             )
         }
 
-        OutlinedTextField(
-            value = email,
-
-            onValueChange = {
-                email = it
-            },
-
-            label = {
-                Text("Email")
-            },
-
-            modifier = Modifier.fillMaxWidth(),
-
-            shape = RoundedCornerShape(16.dp)
-        )
-
-        Spacer(modifier = Modifier.height(30.dp))
-
         Button(
-
             onClick = {
-                if (email.isNotEmpty()) {
-                    scope.launch {
-                        isLoading = true
-                        try {
-                            FirebaseAuth.getInstance().sendPasswordResetEmail(email).await()
-                            message = "Password reset link sent to your email!"
-                        } catch (e: Exception) {
-                            message = "Error: ${e.message}"
-                        } finally {
-                            isLoading = false
-                        }
+
+                val trimmedEmail = email.trim()
+
+                if (trimmedEmail.isEmpty()) {
+                    message = "Please enter your email address."
+                    return@Button
+                }
+
+                scope.launch {
+
+                    isLoading = true
+                    message = ""
+
+                    try {
+
+                        FirebaseAuth.getInstance()
+                            .sendPasswordResetEmail(trimmedEmail)
+                            .await()
+
+                        message =
+                            "Password reset link sent! Please check your email."
+
+                    } catch (e: FirebaseAuthInvalidUserException) {
+
+                        message =
+                            "No account was found with this email address."
+
+                    } catch (e: Exception) {
+
+                        message =
+                            "Error: ${e.localizedMessage ?: "Unable to send reset link."}"
+
+                    } finally {
+
+                        isLoading = false
                     }
                 }
             },
@@ -112,19 +133,39 @@ fun ForgotPasswordScreen(
             shape = RoundedCornerShape(18.dp),
 
             colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFF9C6ADE)
+                containerColor = MamaBearPurple
             )
-
         ) {
 
             if (isLoading) {
-                CircularProgressIndicator(color = Color.White, modifier = Modifier.size(24.dp))
+
+                CircularProgressIndicator(
+                    color = Color.White,
+                    modifier = Modifier.size(24.dp)
+                )
+
             } else {
+
                 Text(
                     text = "Reset Password",
-                    color = Color.White
+                    color = Color.White,
+                    fontSize = 16.sp
                 )
             }
+        }
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+        TextButton(
+            onClick = {
+                navController.popBackStack()
+            },
+            enabled = !isLoading
+        ) {
+            Text(
+                text = "Back to Login",
+                color = MamaBearPurple
+            )
         }
     }
 }

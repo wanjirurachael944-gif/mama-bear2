@@ -13,6 +13,8 @@ import com.example.mamabear.ui.screens.authentication.SignupScreen
 import com.example.mamabear.ui.screens.authentication.ForgotPasswordScreen
 import com.example.mamabear.ui.screens.health.HealthRecordsScreen
 import com.example.mamabear.ui.screens.authentication.LoginScreen
+import com.example.mamabear.ui.screens.professional.HealthProfessionalLoginScreen
+import com.example.mamabear.ui.screens.professional.HealthProfessionalSignupScreen
 import com.example.mamabear.ui.screens.home.HomeScreen
 import com.example.mamabear.ui.screens.profile.ProfileScreen
 import com.example.mamabear.ui.screens.reminders.ReminderScreen
@@ -24,6 +26,12 @@ import com.example.mamabear.ui.screens.profile.PrivacyPolicyScreen
 
 import com.example.mamabear.ui.screens.splash.SplashScreen
 import com.example.mamabear.ui.screens.authentication.PersonalDetailsScreen
+import com.example.mamabear.ui.screens.health.MotherHealthProfileScreen
+import com.example.mamabear.ui.screens.health.RecordAncVisitScreen
+import com.example.mamabear.ui.screens.health.HealthProfessionalScreen
+import com.example.mamabear.ui.screens.health.MothersUnderCareScreen
+import com .example .mamabear.ui.screens.learning.LearningHubScreen
+import com.example .mamabear .ui.screens.emergency.EmergencySupportScreen
 
 @Composable
 fun AppNavigation(
@@ -64,6 +72,61 @@ fun AppNavigation(
                 navController = navHostController
             )
         }
+        // 🔹 HEALTH PROFESSIONAL SIGNUP SCREEN
+        composable(route = "health_professional_signup") {
+            HealthProfessionalSignupScreen(
+                navController = navHostController
+            )
+        }
+
+        // 🔹 HEALTH PROFESSIONAL LOGIN SCREEN
+        composable(route = "health_professional_login") {
+            HealthProfessionalLoginScreen(
+                navController = navHostController
+            )
+        }
+        //  HEALTH PROFESSIONAL DASHBOARD
+        composable (route = "health_professional "){
+            HealthProfessionalScreen (
+                navController = navHostController
+            )
+        }
+        //  MOTHERS UNDER CARE
+        composable(route = "mothers_under_care"){
+            MothersUnderCareScreen(
+                navController =navHostController
+            )
+        }
+        // LEARNING HUB
+        composable (route = "learning_hub"){
+            LearningHubScreen(
+                navController = navHostController
+            )
+        }
+        // MOTHER HEALTH PROFILE
+        composable(
+            route = "mother_health_profile/{motherId}"
+        ) { backStackEntry ->
+
+            val motherId =
+                backStackEntry.arguments?.getString("motherId") ?: ""
+
+            MotherHealthProfileScreen(
+                navController = navHostController,
+                motherId = motherId
+            )
+        }
+        // Record ANC Visit Screen
+       composable (
+           route = "record_anc_visit/{motherId}"
+       ){backStackEntry ->
+           val motherId = backStackEntry.arguments?.getString("motherId") ?: ""
+           RecordAncVisitScreen(
+                navController =  navHostController ,
+               motherId = motherId
+           )
+       }
+
 
         // 🔹 FORGOT PASSWORD SCREEN
         composable(route = "forgotPassword") {
@@ -101,6 +164,12 @@ fun AppNavigation(
         composable(route = "reminders") {
 
             ReminderScreen(
+                navController = navHostController
+            )
+        }
+        //Emergency
+        composable (route = "emergency"){
+            EmergencySupportScreen (
                 navController = navHostController
             )
         }

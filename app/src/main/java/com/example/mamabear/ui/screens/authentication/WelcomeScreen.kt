@@ -68,5 +68,51 @@ fun WelcomeScreen(navController: NavController) {
         ) {
             Text("Login", fontSize = 18.sp, fontWeight = FontWeight.Bold)
         }
+        Spacer(modifier = Modifier.height(24.dp))
+
+        Text(
+            text = "Are you a Health Professional?",
+            color = Color.Gray,
+            fontSize = 14.sp,
+            fontWeight = FontWeight.Medium
+        )
+
+        Spacer(modifier = Modifier.height(4.dp))
+
+        Row(
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+
+            TextButton(
+                onClick = {
+                    navController.navigate("health_professional_signup")
+                }
+            ) {
+                Text(
+                    text = "Sign Up",
+                    color = MamaBearPurple,
+                    fontWeight = FontWeight.SemiBold
+                )
+            }
+
+            Text(
+                text = " | ",
+                color = Color.Gray
+            )
+
+            TextButton(
+                onClick = {
+                    navController.navigate("health_professional_login")
+                }
+            ) {
+                Text(
+                    text = "Login",
+                    color = MamaBearPurple,
+                    fontWeight = FontWeight.SemiBold
+                )
+            }
+        }
     }
 }
+
